@@ -2,9 +2,38 @@ import 'package:flutter/material.dart';
 import '../models/series_model.dart';
 import '../widgets/series_card.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  // final Function(Series) onAddSeries;   // callback to add series to the list
+
+  @override
+  State<HomePage> createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+
+  void addSeries(Series series) {
+    setState(() {
+      seriesList.add(series);
+    });
+  }
+
+  void updateSeries(Series updatedSeries) {
+    setState(() {
+      final index = seriesList.indexWhere((s) => s.id == updatedSeries.id);
+      if (index != -1) {
+        seriesList[index] = updatedSeries;
+      }
+    });
+  }
+
+  void removeSeries(String id) {
+    setState(() {
+      seriesList.removeWhere((s) => s.id == id);
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,12 +48,15 @@ class HomePage extends StatelessWidget {
               fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
-          
+
           Expanded(
             child: ListView.builder(
               itemCount: seriesList.length,
               itemBuilder: (context, index) {
-                return SeriesCard(series: seriesList[index]);
+                final series = seriesList[index];
+                return SeriesCard(series: series, 
+                onUpdate: updateSeries,
+                onDelete: removeSeries,);
               },
             ),
           ),
@@ -32,7 +64,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
 
   final List<Series> seriesList = [
     Series(
