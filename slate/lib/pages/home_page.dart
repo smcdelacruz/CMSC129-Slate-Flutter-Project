@@ -8,15 +8,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Trending Series',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            'Records',
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
+          
           Expanded(
             child: ListView.builder(
               itemCount: seriesList.length,
@@ -45,9 +48,8 @@ class HomePage extends StatelessWidget {
       title: 'The Crown',
       genre: 'Drama',
       rating: 4.7,
-      posterUrl: 'https://static.wikia.nocookie.net/the-crown/images/c/c6/Season_3.png/revision/latest?cb=20191016180041',
+      posterUrl: 'https://upload.wikimedia.org/wikipedia/en/b/ba/The_Crown_season_2.jpeg',
       isWatched: false,
     ),
-    // Add more series as needed
   ];
 }

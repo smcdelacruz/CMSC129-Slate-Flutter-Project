@@ -29,7 +29,7 @@ class SlateApp extends StatelessWidget {
       title: 'Slate',
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0F0C0C),   // Body color
+        scaffoldBackgroundColor: const Color.fromRGBO(15, 12, 12, 1),   // Body color
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,    // AppBar color
           elevation: 0,
