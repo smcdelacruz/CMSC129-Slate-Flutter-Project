@@ -4,8 +4,16 @@ import '../pages/series_details.dart';
 
 class SeriesCard extends StatelessWidget {
   final Series series;
+  final void Function(Series) onUpdate;
+  final void Function(String) onDelete;
 
-  const SeriesCard({super.key, required this.series});
+  const SeriesCard({
+    super.key,
+    required this.series,
+    required this.onUpdate,
+    required this.onDelete,
+  });
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class SeriesCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SeriesDetailsPage(series: series),
+            builder: (context) => SeriesDetailsPage(series: series, onUpdate: onUpdate, onDelete: onDelete),
           ),
         );
       },

@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:slate/pages/add_series_form.dart';
 import '../models/series_model.dart';
 
 class SeriesDetailsPage extends StatelessWidget {
   final Series series;
+  // final GlobalKey<HomePageState> homePageKey;
 
-  const SeriesDetailsPage({super.key, required this.series});
+  // const SeriesDetailsPage({super.key, required this.series, required this.homePageKey});
+
+  final void Function(Series) onUpdate;
+  final void Function(String) onDelete;
+
+  const SeriesDetailsPage({
+    super.key,
+    required this.series,
+    required this.onUpdate,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +30,144 @@ class SeriesDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(series.title),
+
+        actions: [
+          PopupMenuButton<String>(
+            color: const Color(0xFF0F0C0C),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onSelected: (option) {
+              if (option == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddSeriesForm(
+                      seriesToEdit: series,
+                      onSubmit: (updatedSeries) {
+                        onUpdate(updatedSeries);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                );
+              } else if (option == 'delete') {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Delete Series'),
+                    content: const Text('Are you sure you want to delete this record?'),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                      TextButton(
+                        onPressed: () {
+                          onDelete(series.id);
+                          Navigator.pop(context); // close the dialog
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'edit', 
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.edit, 
+                      color: Colors.white, 
+                      size: 20), 
+                    
+                    SizedBox(width: 10), 
+                    
+                    Text('Edit')])),
+
+              const PopupMenuItem(
+                value: 'delete', 
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.delete_outline_rounded, 
+                      color: Colors.red, size: 23), 
+                    SizedBox(width: 10), 
+                    Text('Delete', 
+                      style: TextStyle(
+                        color: Colors.red))])),
+            ],
+          ),
+        ],
+
+        // actions: [
+        //   PopupMenuButton<String>(
+        //     color: const Color(0xFF0F0C0C),
+        //     icon: const Icon(Icons.more_vert, color: Colors.white),
+        //     onSelected: (String option) {
+        //       if (option == 'edit') {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => const MainScreen(title: 'Edit Series')),
+        //         );
+        //       } else if (option == 'delete') {
+        //         showDialog(context: context, 
+        //         builder: (context) => AlertDialog(
+        //           title: const Text('Delete Series'),
+        //           content: const Text('Are you sure you want to delete this record?'),
+        //           actions: [
+        //             TextButton(
+        //               onPressed: () => Navigator.pop(context), 
+        //               child: const Text('Cancel')
+        //             ),
+        //             TextButton(
+        //               onPressed: () {
+        //                 // TODO: Implement delete series functionality
+        //                 Navigator.pop(context);
+        //               },
+        //               child: const Text('Delete', style: TextStyle(color: Colors.red)),
+        //             ),
+        //           ],
+        //         ), 
+        //         );
+        //       }
+        //     },  
+        //     // build menu items
+        //     itemBuilder: (BuildContext context) { 
+        //       return [
+        //         const PopupMenuItem<String>(
+        //           value: 'edit',
+        //           child: Row(
+        //             children: [
+        //               Icon(Icons.edit, 
+        //                    color: Colors.white,
+        //                    size: 20,
+        //               ),
+        //               SizedBox(width: 10),
+        //               Text('Edit'),
+        //             ],
+        //           ),
+        //         ),
+        //         const PopupMenuItem<String>(
+        //           value: 'delete',
+        //           child: Row(
+        //             children: [
+        //               Icon(Icons.delete_outline_rounded, 
+        //                    color: Colors.red,
+        //                    size: 23,
+        //               ),
+        //               SizedBox(width: 10),
+        //               Text('Delete', 
+        //                     style: TextStyle(color: Colors.red)),
+        //             ],
+        //           ),
+        //         ),
+        //       ];
+        //     },
+        //   )
+        // ],
       ),
+
+
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
