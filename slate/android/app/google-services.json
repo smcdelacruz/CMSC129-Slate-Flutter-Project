@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "40076882520",
+    "project_id": "slate-flutter-project",
+    "storage_bucket": "slate-flutter-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40076882520:android:1a9ba1d7edd07cc5d9902d",
+        "android_client_info": {
+          "package_name": "com.example.slate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfqwZEWXIpmFZG5ymE2z3chtEEUvtjxKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
