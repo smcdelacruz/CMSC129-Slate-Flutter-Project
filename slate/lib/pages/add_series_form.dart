@@ -4,11 +4,9 @@ import 'package:slate/models/series_model.dart';
 import 'package:slate/services/firestore_service.dart';
 
 class AddSeriesForm extends StatefulWidget {
-  // final Function(dynamic) onAddSeries;
 
   final Function(Series)? onSubmit;
   final Series? seriesToEdit;
-  
 
   const AddSeriesForm({super.key, this.onSubmit, this.seriesToEdit});
 
@@ -22,6 +20,7 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
   final _genreController = TextEditingController();
   final _ratingController = TextEditingController();
   final _posterUrlController = TextEditingController();
+  final _commentController = TextEditingController();
   bool _isWatched = false;
 
   @override
@@ -32,6 +31,7 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
       _genreController.text = widget.seriesToEdit!.genre;
       _ratingController.text = widget.seriesToEdit!.rating.toString();
       _posterUrlController.text = widget.seriesToEdit!.posterUrl;
+      _commentController.text = widget.seriesToEdit!.comment ?? '';
       _isWatched = widget.seriesToEdit!.isWatched;
     }
   }
@@ -128,6 +128,15 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
 
               const SizedBox(height: 20),
 
+              TextFormField(
+                controller: _commentController,
+                decoration: const InputDecoration(
+                  labelText: 'Comments (optional)',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 5,
+              ),
+
               Row(
                 children: [
                   const Text('Watched?'),
@@ -157,6 +166,7 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                         ? 'https://fastly.picsum.photos/id/223/4912/3264.jpg?hmac=yFw4iYM4wK1Ub5iKhVsHCiu9PN4uBamqVrZmPXJLdTo'
                         : _posterUrlController.text,
                     isWatched: _isWatched,
+                    comment: _commentController.text.isEmpty ? null: _commentController.text,
                   );
 
                   final navigator = Navigator.of(context);
@@ -175,40 +185,6 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                 },
                 child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update Series'),
               )
-
-
-
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     if (_formKey.currentState!.validate()) {
-              //       final newSeries = Series(
-              //         // id: DateTime.now().toString(),
-              //         id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
-              //         title: _titleController.text,
-              //         genre: _genreController.text,
-              //         rating: double.parse(_ratingController.text),
-              //         posterUrl: _posterUrlController.text.isEmpty
-              //             ? 'https://via.placeholder.com/150'
-              //             : _posterUrlController.text,
-              //         isWatched: _isWatched,
-              //       );
-
-              //       // widget.onSubmit(newSeries);
-              //       // await addSeriesToFirestore(newSeries);
-              //       if (isEditing) {
-              //         await updateSeriesInFirestore(newSeries);
-              //       } else {
-              //         await addSeriesToFirestore(newSeries);
-              //       }
-
-              //       if (!mounted) return;
-              //       Navigator.pop(context);
-                  
-                    
-              //     }
-              //   }, 
-              //   child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update Series'),
-              // )
             ],
           )
         )

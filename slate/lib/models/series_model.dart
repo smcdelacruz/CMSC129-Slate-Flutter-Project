@@ -9,9 +9,9 @@ class Series {
   final double rating;
   final String posterUrl;
   final bool isWatched;
+  final String? comment;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  // final String comment;
 
   Series({
     required this.id,
@@ -20,10 +20,9 @@ class Series {
     required this.rating,
     required this.posterUrl,
     required this.isWatched,
+    this.comment,
     this.createdAt,
     this.updatedAt,
-    // required this.comment,
-
   });
 
   // Convert Firestore to Series object
@@ -36,36 +35,34 @@ class Series {
       rating: (data['rating'] ?? 0).toDouble(),
       posterUrl: data['posterUrl'] ?? '',
       isWatched: data['isWatched'] ?? false,
+      comment: data['comment'] ?? '',
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
-      // comment: data['comment'] ?? '',
     );
   }
 
-  Map<String, dynamic> createMap() {
-  return {
-    'title': title,
-    'genre': genre,
-    'rating': rating,
-    'posterUrl': posterUrl,
-    'isWatched': isWatched,
-    'createdAt': createdAt ?? FieldValue.serverTimestamp(),
-    'updatedAt': FieldValue.serverTimestamp(),
-  };
-}
+    Map<String, dynamic> createMap() {
+    return {
+      'title': title,
+      'genre': genre,
+      'rating': rating,
+      'posterUrl': posterUrl,
+      'isWatched': isWatched,
+      'comment': comment ?? '',
+      'createdAt': createdAt ?? FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
+  }
 
-Map<String, dynamic> updateMap() {
-  return {
-    'title': title,
-    'genre': genre,
-    'rating': rating,
-    'posterUrl': posterUrl,
-    'isWatched': isWatched,
-    'updatedAt': FieldValue.serverTimestamp(),
-  };
-}
-
-
-  
-
+  Map<String, dynamic> updateMap() {
+    return {
+      'title': title,
+      'genre': genre,
+      'rating': rating,
+      'posterUrl': posterUrl,
+      'isWatched': isWatched,
+      'comment': comment ?? '',
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
+  }
 }

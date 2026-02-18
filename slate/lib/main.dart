@@ -10,6 +10,7 @@ import 'pages/library_page.dart';
 import 'pages/user_page.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -49,7 +50,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   late final List<Widget> _pages;
 
@@ -68,11 +69,11 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   void _openAddSeriesForm() {
     Navigator.push(
@@ -120,40 +121,40 @@ class _MainScreenState extends State<MainScreen> {
           child: const Icon(Icons.add, color: Colors.black),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        color: Colors.black,
-        notchMargin: 6.0,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              IconButton(
-                onPressed: () => _onItemTapped(0),
-                icon: Icon(Icons.home,
-                    color: _selectedIndex == 0 ? Colors.white : Colors.grey),
-              ),
-              IconButton(
-                onPressed: () => _onItemTapped(1),
-                icon: Icon(Icons.search,
-                    color: _selectedIndex == 1 ? Colors.white : Colors.grey),
-              ),
-              const SizedBox(width: 1),
-              IconButton(
-                onPressed: () => _onItemTapped(2),
-                icon: Icon(Icons.collections_bookmark_rounded,
-                    color: _selectedIndex == 2 ? Colors.white : Colors.grey),
-              ),
-              IconButton(
-                onPressed: () => _onItemTapped(3),
-                icon: Icon(Icons.account_circle,
-                    color: _selectedIndex == 3 ? Colors.white : Colors.grey),
-              ),
-            ],
-          ),
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: const CircularNotchedRectangle(),
+      //   color: Colors.black,
+      //   notchMargin: 6.0,
+      //   child: SizedBox(
+      //     height: 60,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //       children: <Widget>[
+      //         IconButton(
+      //           onPressed: () => _onItemTapped(0),
+      //           icon: Icon(Icons.home,
+      //               color: _selectedIndex == 0 ? Colors.white : Colors.grey),
+      //         ),
+      //         IconButton(
+      //           onPressed: () => _onItemTapped(1),
+      //           icon: Icon(Icons.search,
+      //               color: _selectedIndex == 1 ? Colors.white : Colors.grey),
+      //         ),
+      //         const SizedBox(width: 1),
+      //         IconButton(
+      //           onPressed: () => _onItemTapped(2),
+      //           icon: Icon(Icons.collections_bookmark_rounded,
+      //               color: _selectedIndex == 2 ? Colors.white : Colors.grey),
+      //         ),
+      //         IconButton(
+      //           onPressed: () => _onItemTapped(3),
+      //           icon: Icon(Icons.account_circle,
+      //               color: _selectedIndex == 3 ? Colors.white : Colors.grey),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
