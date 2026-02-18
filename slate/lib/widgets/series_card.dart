@@ -14,7 +14,6 @@ class SeriesCard extends StatelessWidget {
     required this.onDelete,
   });
 
-
   @override
   Widget build(BuildContext context) {
     Color watchedColor = 
@@ -26,7 +25,6 @@ class SeriesCard extends StatelessWidget {
 
     Color statusTextColor = 
       series.isWatched ? Colors.black : Colors.white;
-
 
     return InkWell(
       borderRadius: BorderRadius.circular(10),
@@ -117,8 +115,6 @@ class SeriesCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     )
-
-
                   ],
                 ),
               )
@@ -127,37 +123,5 @@ class SeriesCard extends StatelessWidget {
           )
       )
     );
-    
-    
-    // Card(
-    //   child: Column(
-    //     children: [
-    //       Image.network(series.posterUrl, height: 150, fit: BoxFit.cover),
-    //       Padding(
-    //         padding: const EdgeInsets.all(8.0),
-    //         child: Row(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             Text(series.title, 
-    //                  style: const TextStyle(
-    //                         fontSize: 18, 
-    //                         fontWeight: FontWeight.bold)),
-    //             Text(
-    //               series.genre, 
-    //               style: const TextStyle(color: Colors.grey)),
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //               children: [
-    //                 Text('Rating: ${series.rating}'),
-    //                 Icon(series.isWatched ? Icons.check_circle : Icons.radio_button_unchecked, 
-    //                      color: series.isWatched ? Colors.green : Colors.red),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

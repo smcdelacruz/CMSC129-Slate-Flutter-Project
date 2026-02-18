@@ -11,9 +11,11 @@ import 'pages/user_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const SlateApp());
 }
 
@@ -76,12 +78,13 @@ class _MainScreenState extends State<MainScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddSeriesForm(
-          onSubmit: (series) {
-            // Call HomePage's state method to add series
-            homePageKey.currentState?.addSeries(series);
-          },
-        ),
+        builder: (context) => AddSeriesForm(),
+        // builder: (context) => AddSeriesForm(
+        //   onSubmit: (series) {
+        //     // Call HomePage's state method to add series
+        //     homePageKey.currentState?.addSeries(series);
+        //   },
+        // ),
       ),
     );
   }
@@ -110,11 +113,11 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Colors.black,
       ),
       body: SafeArea(child: _pages[_selectedIndex]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openAddSeriesForm,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        child: const Icon(Icons.add, color: Colors.black),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openAddSeriesForm,
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: const Icon(Icons.add, color: Colors.black),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(

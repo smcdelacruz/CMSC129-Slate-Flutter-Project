@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slate/models/series_model.dart';
+import 'package:slate/services/firestore_service.dart';
 
 class AddSeriesForm extends StatefulWidget {
   // final Function(dynamic) onAddSeries;
-  final Function(Series) onSubmit;
+
+  final Function(Series)? onSubmit;
   final Series? seriesToEdit;
   
 
-  const AddSeriesForm({super.key, required this.onSubmit, this.seriesToEdit});
+  const AddSeriesForm({super.key, this.onSubmit, this.seriesToEdit});
 
   @override
   State<AddSeriesForm> createState() => _AddSeriesFormState();
@@ -61,92 +63,6 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                 color: Colors.white,
               )
         ),
-
-        // Title
-        // title: Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: [
-        //     Text(
-        //       'Edit Series Details',
-        //       style: GoogleFonts.roboto(
-        //         fontSize: 27,
-        //         fontWeight: FontWeight.w700,
-        //         color: Colors.white,
-        //       )
-        //     ),
-        //   ]
-        // ),
-
-        // actions: [
-        //   PopupMenuButton<String>(
-        //     color: const Color(0xFF0F0C0C),
-        //     icon: const Icon(Icons.more_vert, color: Colors.white),
-
-        //     onSelected: (String option) {
-        //       if (option == 'edit') {
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(builder: (context) => const MainScreen(title: 'Edit Series')),
-        //         );
-
-        //       } else if (option == 'delete') {
-        //         showDialog(context: context, 
-        //         builder: (context) => AlertDialog(
-        //           title: const Text('Delete Series'),
-        //           content: const Text('Are you sure you want to delete this record?'),
-        //           actions: [
-        //             TextButton(
-        //               onPressed: () => Navigator.pop(context), 
-        //               child: const Text('Cancel')
-        //             ),
-        //             TextButton(
-        //               onPressed: () {
-        //                 // TODO: Implement delete series functionality
-        //                 Navigator.pop(context);
-        //               },
-        //               child: const Text('Delete', style: TextStyle(color: Colors.red)),
-        //             ),
-        //           ],
-        //         ), 
-        //         );
-        //       }
-        //     }, 
-            
-        //     // build menu items
-        //     itemBuilder: (BuildContext context) { 
-        //       return [
-        //         const PopupMenuItem<String>(
-        //           value: 'edit',
-        //           child: Row(
-        //             children: [
-        //               Icon(Icons.edit, 
-        //                    color: Colors.white,
-        //                    size: 20,
-        //               ),
-        //               SizedBox(width: 10),
-        //               Text('Edit'),
-        //             ],
-        //           ),
-        //         ),
-        //         const PopupMenuItem<String>(
-        //           value: 'delete',
-        //           child: Row(
-        //             children: [
-        //               Icon(Icons.delete_outline_rounded, 
-        //                    color: Colors.red,
-        //                    size: 23,
-        //               ),
-        //               SizedBox(width: 10),
-        //               Text('Delete', 
-        //                     style: TextStyle(color: Colors.red)),
-        //             ],
-        //           ),
-        //         ),
-        //       ];
-        //     },
-        //   )
-        // ],
       ),
 
       body: Padding(
@@ -207,7 +123,7 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) =>
-                  value == null || value.isEmpty ? 'Please enter a poster URL' : null,
+                  value == null || value.isEmpty ? null : null,
               ),
 
               const SizedBox(height: 20),
@@ -229,42 +145,74 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
               const SizedBox(height: 30),
 
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final newSeries = Series(
-                      // id: DateTime.now().toString(),
-                      id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
-                      title: _titleController.text,
-                      genre: _genreController.text,
-                      rating: double.parse(_ratingController.text),
-                      posterUrl: _posterUrlController.text.isEmpty
-                          ? 'https://via.placeholder.com/150'
-                          : _posterUrlController.text,
-                      isWatched: _isWatched,
-                    );
+                onPressed: () async {
+                  if (!_formKey.currentState!.validate()) return;
 
-                    widget.onSubmit(newSeries);
-                    Navigator.pop(context);
+                  final newSeries = Series(
+                    id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
+                    title: _titleController.text,
+                    genre: _genreController.text,
+                    rating: double.parse(_ratingController.text),
+                    posterUrl: _posterUrlController.text.isEmpty
+                        ? 'https://fastly.picsum.photos/id/223/4912/3264.jpg?hmac=yFw4iYM4wK1Ub5iKhVsHCiu9PN4uBamqVrZmPXJLdTo'
+                        : _posterUrlController.text,
+                    isWatched: _isWatched,
+                  );
+
+                  final navigator = Navigator.of(context);
+
+                  if (isEditing) {
+                    await updateSeriesInFirestore(newSeries);
+                  } else {
+                    await addSeriesToFirestore(newSeries);
                   }
-                }, 
+
+                  if (!mounted) return;
+
+                  widget.onSubmit?.call(newSeries);
+
+                  navigator.pop();
+                },
                 child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update Series'),
               )
 
+
+
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     if (_formKey.currentState!.validate()) {
+              //       final newSeries = Series(
+              //         // id: DateTime.now().toString(),
+              //         id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
+              //         title: _titleController.text,
+              //         genre: _genreController.text,
+              //         rating: double.parse(_ratingController.text),
+              //         posterUrl: _posterUrlController.text.isEmpty
+              //             ? 'https://via.placeholder.com/150'
+              //             : _posterUrlController.text,
+              //         isWatched: _isWatched,
+              //       );
+
+              //       // widget.onSubmit(newSeries);
+              //       // await addSeriesToFirestore(newSeries);
+              //       if (isEditing) {
+              //         await updateSeriesInFirestore(newSeries);
+              //       } else {
+              //         await addSeriesToFirestore(newSeries);
+              //       }
+
+              //       if (!mounted) return;
+              //       Navigator.pop(context);
+                  
+                    
+              //     }
+              //   }, 
+              //   child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update Series'),
+              // )
             ],
           )
         )
       ),
-    );
-    // Form(
-    //   key: _formKey,
-    //   child: const Column(
-    //     children: <Widget>[
-    //       // TextFormField for series title
-    //       // TextFormField for genre
-    //     ],
-    //   )
-    // );}
-  
+    ); 
   }
-
 }
