@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'slate-flutter-project.firebasestorage.app',
     measurementId: 'G-FXZ90L012Q',
   );
+
 }
