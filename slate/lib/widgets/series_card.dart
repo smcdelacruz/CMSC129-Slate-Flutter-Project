@@ -38,14 +38,14 @@ class SeriesCard extends StatelessWidget {
       },
       child: Card(
         color: Colors.transparent,
-        elevation: 0.5,
-        margin: const EdgeInsets.symmetric(vertical: 6.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         
         child: Row(
-          // mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: <Widget>[
+          children: [
 
             ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -62,12 +62,12 @@ class SeriesCard extends StatelessWidget {
 
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
   
-                  children: <Widget>[
+                  children: [
                     Text(
                       series.title,
                       style: const TextStyle(
@@ -88,7 +88,7 @@ class SeriesCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 8.0),
 
                     Text(
                       ratingText.data ?? 'Rating: N/A',
@@ -99,7 +99,7 @@ class SeriesCard extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 8.0),
 
                     Chip(
                       label: Text(
@@ -110,7 +110,7 @@ class SeriesCard extends StatelessWidget {
                         ),
                       ),
                       backgroundColor: watchedColor,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

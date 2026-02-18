@@ -5,10 +5,7 @@ import '../models/series_model.dart';
 
 class SeriesDetailsPage extends StatefulWidget {
   final Series series;
-  // final GlobalKey<HomePageState> homePageKey;
-
-  // const SeriesDetailsPage({super.key, required this.series, required this.homePageKey});
-
+ 
   final void Function(Series) onUpdate;
   final void Function(String) onDelete;
 
@@ -32,7 +29,6 @@ class SeriesDetailsPage extends StatefulWidget {
           .map((snapshot) => Series.fromFirestore(snapshot));
     }
   
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Series>(
@@ -132,116 +128,80 @@ class SeriesDetailsPage extends StatefulWidget {
               ],
             ),
           ],
-
-          // actions: [
-          //   PopupMenuButton<String>(
-          //     color: const Color(0xFF0F0C0C),
-          //     icon: const Icon(Icons.more_vert, color: Colors.white),
-          //     onSelected: (String option) {
-          //       if (option == 'edit') {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: (context) => const MainScreen(title: 'Edit Series')),
-          //         );
-          //       } else if (option == 'delete') {
-          //         showDialog(context: context, 
-          //         builder: (context) => AlertDialog(
-          //           title: const Text('Delete Series'),
-          //           content: const Text('Are you sure you want to delete this record?'),
-          //           actions: [
-          //             TextButton(
-          //               onPressed: () => Navigator.pop(context), 
-          //               child: const Text('Cancel')
-          //             ),
-          //             TextButton(
-          //               onPressed: () {
-          //                 Navigator.pop(context);
-          //               },
-          //               child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          //             ),
-          //           ],
-          //         ), 
-          //         );
-          //       }
-          //     },  
-          //     // build menu items
-          //     itemBuilder: (BuildContext context) { 
-          //       return [
-          //         const PopupMenuItem<String>(
-          //           value: 'edit',
-          //           child: Row(
-          //             children: [
-          //               Icon(Icons.edit, 
-          //                    color: Colors.white,
-          //                    size: 20,
-          //               ),
-          //               SizedBox(width: 10),
-          //               Text('Edit'),
-          //             ],
-          //           ),
-          //         ),
-          //         const PopupMenuItem<String>(
-          //           value: 'delete',
-          //           child: Row(
-          //             children: [
-          //               Icon(Icons.delete_outline_rounded, 
-          //                    color: Colors.red,
-          //                    size: 23,
-          //               ),
-          //               SizedBox(width: 10),
-          //               Text('Delete', 
-          //                     style: TextStyle(color: Colors.red)),
-          //             ],
-          //           ),
-          //         ),
-          //       ];
-          //     },
-          //   )
-          // ],
         ),
 
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.network(series.posterUrl, height: 300, fit: BoxFit.cover),
 
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(series.posterUrl, height: 300, fit: BoxFit.cover),
-              const SizedBox(height: 20),
-              Text(series.title, 
-                  style: const TextStyle(
-                          fontSize: 24, 
-                          fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              Text('Genre: ${series.genre}', 
-                  style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Rating: ${series.rating}', 
-                  style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Text('Status: ', 
+                const SizedBox(height: 20),
+
+                Text(series.title, 
+                    style: const TextStyle(
+                            fontSize: 24, 
+                            fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+
+                Text('Genre: ${series.genre}', 
                     style: const TextStyle(fontSize: 18)),
-                  Chip(
-                    label: Text(
-                    series.isWatched ? 'Watched' : 'Not Watched',
-                    style: TextStyle(
-                            color: statusTextColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    backgroundColor: watchedColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    ),
-                  )
-                ],
-              ),
-            ],
+
+                const SizedBox(height: 10),
+
+                Text('Rating: ${series.rating}', 
+                    style: const TextStyle(fontSize: 18)),
+
+                const SizedBox(height: 10),
+                
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Status: ', 
+                      style: const TextStyle(fontSize: 18)),
+                      
+                    Chip(
+                      label: Text(
+                      series.isWatched ? 'Watched' : 'Not Watched',
+                      style: TextStyle(
+                              color: statusTextColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      backgroundColor: watchedColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(10),
+                      ),
+                    )
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                Text(
+                  'Comments: \n',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                  
+                ),
+
+                Text(
+                  series.comment ?? 'No comments added.',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.justify,
+                )
+              ],
+            ),
           ),
-        ),
+        )
       );
     });
   }
