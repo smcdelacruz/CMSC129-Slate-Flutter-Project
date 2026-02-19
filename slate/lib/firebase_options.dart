@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCTemUAGQQapsh4SdJX_Y8pkOBBMOCbGGo',
+    apiKey: 'AIzaSyBo4w9jI9U2wzKWYjCiFPDvZOla83W2A4Y',
     appId: '1:40076882520:web:07e8d1c9782f64b3d9902d',
     messagingSenderId: '40076882520',
     projectId: 'slate-flutter-project',
@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDfqwZEWXIpmFZG5ymE2z3chtEEUvtjxKY',
+    apiKey: 'AIzaSyAxXSdUWucKPgfDwiZ5iXW56ZyLJzNek7A',
     appId: '1:40076882520:android:1a9ba1d7edd07cc5d9902d',
     messagingSenderId: '40076882520',
     projectId: 'slate-flutter-project',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDTJkzjhC18TRLuo43ZJFA_LrgZl3HUOJY',
+    apiKey: 'AIzaSyBCYVG-rFj7_KRBKHq5WRuKHQN6wU0kHRI',
     appId: '1:40076882520:ios:32afc66ced705a90d9902d',
     messagingSenderId: '40076882520',
     projectId: 'slate-flutter-project',
