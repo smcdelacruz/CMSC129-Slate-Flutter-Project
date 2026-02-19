@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/series_model.dart';
 import '../pages/series_details.dart';
 
+/// SeriesCard widget display the series information in a card format in the Home page.
 class SeriesCard extends StatelessWidget {
   final Series series;
   final void Function(Series) onUpdate;
@@ -17,18 +18,23 @@ class SeriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color watchedColor = 
-      series.isWatched ? const Color.fromRGBO(241, 186, 10, 1) 
-                       : const Color.fromRGBO(38, 100, 175, 1);
+      series.isWatched ? const Color.fromRGBO(241, 186, 10, 1)    // Yellow == Watched
+                       : const Color.fromARGB(255, 145, 80, 211);   // Blue == Not Watched
+      
+    Color statusTextColor = 
+      series.isWatched ? Colors.black 
+                       : Colors.white;
 
     Text ratingText = 
-      series.isWatched ? Text('Rating: ${series.rating}') : Text('Rating: N/A');                       
+      series.isWatched ? Text('Rating: ${series.rating}') 
+                       : Text('Rating: N/A');      // default rating when 'Not Watched'                 
 
-    Color statusTextColor = 
-      series.isWatched ? Colors.black : Colors.white;
-
+    // Inkwell to make the card clickable, leads to Series Details page once tapped
     return InkWell(
       borderRadius: BorderRadius.circular(10),
       onTap: () {
+
+        // opens the SeriesDetailsPage
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -37,7 +43,7 @@ class SeriesCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: Colors.transparent,
+        color: const Color.fromARGB(255, 28, 26, 26),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -52,12 +58,12 @@ class SeriesCard extends StatelessWidget {
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
               ),
-              child: Image.network(
-                series.posterUrl, 
-                height: 200.0,
-                width: 197.0, 
-                fit: BoxFit.cover
-              ),
+
+              // This allows the poster image to be loaded from either a network URL 
+              // or a local asset path
+              child: series.posterUrl.startsWith("http")
+                ? Image.network(series.posterUrl, height: 200.0, width: 197.0, fit: BoxFit.cover)
+                : Image.asset(series.posterUrl, height: 200.0, width: 197.0, fit: BoxFit.cover),
             ),
 
             Expanded(

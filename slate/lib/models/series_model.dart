@@ -1,4 +1,3 @@
-// ignore: unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Series model that holds the data
@@ -13,6 +12,8 @@ class Series {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  /// Constructor for Series model
+  /// the blueprint for the data structure of a series document in Firestore
   Series({
     required this.id,
     required this.title,
@@ -25,7 +26,7 @@ class Series {
     this.updatedAt,
   });
 
-  // Convert Firestore to Series object
+  // Convert from Firestore data to Series object
   factory Series.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Series(
@@ -41,6 +42,8 @@ class Series {
     );
   }
 
+    /// Convert Series object to Map to store in Firestore database
+   /// Used to add a series document in Firestore
     Map<String, dynamic> createMap() {
     return {
       'title': title,
@@ -54,6 +57,8 @@ class Series {
     };
   }
 
+  /// Convert Series object to Map for Firestore update (without createdAt.
+  /// Used to update a series document in Firestore to avoid overwriting createdAt.
   Map<String, dynamic> updateMap() {
     return {
       'title': title,

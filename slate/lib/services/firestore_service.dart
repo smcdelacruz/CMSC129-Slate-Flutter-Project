@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:slate/models/series_model.dart';
 
+/// Firestore database for CRUD operations on series documents
+
+/// Reference to the 'series' collection in Firestore
 final seriesCollection = FirebaseFirestore.instance.collection('series');
 
-/* Adds series to Firestore */
+/// Adds a new series document to Firestore using add()
 Future<void> addSeriesToFirestore(Series series) async {
   return seriesCollection
       .add(series.createMap())
@@ -12,16 +15,17 @@ Future<void> addSeriesToFirestore(Series series) async {
       .catchError((error) => debugPrint('Failed to add series: $error'));
 }
 
-/* Reads series in Firestore */
+/// Retrieves a real time stream of new changes of series documents from Firestore.
+/// Ordered by creation date (newest first)
 Stream<List<Series>> getSeriesToFirestore() {
   return seriesCollection
       .orderBy('createdAt', descending: true) // newest first
-      .snapshots()
+      .snapshots()  // listens for real-time updates from Firestore
       .map((snapshot) =>
-          snapshot.docs.map((doc) => Series.fromFirestore(doc)).toList());
+          snapshot.docs.map((doc) => Series.fromFirestore(doc)).toList());  // Converts Firestore docs to Series objects
 }
 
-/* Updates series in Firestore */
+/// Updates an existing series document in Firestore
 Future<void> updateSeriesInFirestore(Series series) async {
   return seriesCollection
       .doc(series.id)
@@ -30,7 +34,7 @@ Future<void> updateSeriesInFirestore(Series series) async {
       .catchError((error) => debugPrint('Failed to update series: $error'));
 }
 
-/* Deletes series in Firestore */
+/// Deletes a series document permanently from Firestore using its ID
 Future<void> deleteSeriesFromFirestore(String id) async {
   return seriesCollection
       .doc(id)
