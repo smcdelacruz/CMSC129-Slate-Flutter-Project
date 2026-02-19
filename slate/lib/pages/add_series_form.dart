@@ -187,7 +187,6 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                           id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
                           title: _titleController.text,
                           genre: _genreController.text,
-                          // rating: double.parse(_ratingController.text),
                           rating: _isWatched
                             ? double.parse(_ratingController.text)
                             : 0,
