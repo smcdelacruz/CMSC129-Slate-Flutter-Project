@@ -12,6 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 lib/vers/
+lib/firebase_options.dart
 
 # IntelliJ related
 *.iml
@@ -89,3 +90,5 @@ app.*.map.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+
