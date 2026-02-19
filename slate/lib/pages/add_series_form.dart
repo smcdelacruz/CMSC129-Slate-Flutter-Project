@@ -106,6 +106,9 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
+                  if (!_isWatched) {
+                    return null; // No validation needed if not watched
+                  }
                   if (value == null || value.isEmpty) {
                     return 'Please enter a rating';
                   }
@@ -148,6 +151,9 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                     onChanged: (value) {
                       setState(() {
                         _isWatched = value;
+                        if (!value) {
+                          _ratingController.clear(); // Clears the rating if switched to 'Not Watched'
+                        }
                       });
                     },
                   ),
@@ -181,7 +187,11 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                           id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
                           title: _titleController.text,
                           genre: _genreController.text,
-                          rating: double.parse(_ratingController.text),
+                          // rating: double.parse(_ratingController.text),
+                          rating: _isWatched
+                            ? double.parse(_ratingController.text)
+                            : 0,
+
                           posterUrl: _posterUrlController.text.isEmpty
                               ? "assets/images/default.png"
                               : _posterUrlController.text,
