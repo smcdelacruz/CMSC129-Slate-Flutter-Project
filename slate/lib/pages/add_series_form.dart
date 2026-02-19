@@ -5,6 +5,7 @@ import 'package:slate/services/firestore_service.dart';
 
 class AddSeriesForm extends StatefulWidget {
 
+  // Optional callback functions to be called after adding or updating a series, passed from the Home page
   final Function(Series)? onSubmit;
   final Series? seriesToEdit;
 
@@ -15,7 +16,9 @@ class AddSeriesForm extends StatefulWidget {
 }
 
 class _AddSeriesFormState extends State<AddSeriesForm> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();    // Global key to identify the form and validate it
+
+  // Text editing controllers to store user inputs from text fields
   final _titleController = TextEditingController();
   final _genreController = TextEditingController();
   final _ratingController = TextEditingController();
@@ -48,8 +51,8 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
         // Leading Icon
         leading: IconButton(
           onPressed: () {
-        Navigator.pop(context);
-      }, 
+            Navigator.pop(context);
+          }, 
           icon: const Icon(Icons.chevron_left_rounded),
           iconSize: 35.0,
           color: Colors.white,
@@ -61,7 +64,7 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
                 fontSize: 27,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-              )
+          )
         ),
       ),
 
@@ -153,42 +156,62 @@ class _AddSeriesFormState extends State<AddSeriesForm> {
 
               const SizedBox(height: 30),
 
-              ElevatedButton(
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) return;
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                  ),
 
-                  final newSeries = Series(
-                    id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
-                    title: _titleController.text,
-                    genre: _genreController.text,
-                    rating: double.parse(_ratingController.text),
-                    posterUrl: _posterUrlController.text.isEmpty
-                        ? 'https://fastly.picsum.photos/id/223/4912/3264.jpg?hmac=yFw4iYM4wK1Ub5iKhVsHCiu9PN4uBamqVrZmPXJLdTo'
-                        : _posterUrlController.text,
-                    isWatched: _isWatched,
-                    comment: _commentController.text.isEmpty ? null: _commentController.text,
-                  );
+                   const SizedBox(width: 12),
 
-                  final navigator = Navigator.of(context);
+                  Expanded(
+                    child:
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Runs the validator functions of all form fields, 
+                          // returns true if all are valid and adds the series to the database
+                          if (!_formKey.currentState!.validate()) return;  
 
-                  if (isEditing) {
-                    await updateSeriesInFirestore(newSeries);
-                  } else {
-                    await addSeriesToFirestore(newSeries);
-                  }
+                        final newSeries = Series(
+                          id: widget.seriesToEdit?.id ?? DateTime.now().toString(),
+                          title: _titleController.text,
+                          genre: _genreController.text,
+                          rating: double.parse(_ratingController.text),
+                          posterUrl: _posterUrlController.text.isEmpty
+                              ? "assets/images/default.png"
+                              : _posterUrlController.text,
+                          isWatched: _isWatched,
+                          comment: _commentController.text.isEmpty ? null: _commentController.text,
+                        );
 
-                  if (!mounted) return;
+                        final navigator = Navigator.of(context);
 
-                  widget.onSubmit?.call(newSeries);
+                        if (isEditing) {
+                          await updateSeriesInFirestore(newSeries);
+                        } else {
+                          await addSeriesToFirestore(newSeries);
+                        }
 
-                  navigator.pop();
-                },
-                child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update Series'),
+                        if (!mounted) return;
+
+                        widget.onSubmit?.call(newSeries);
+                        navigator.pop();
+                      },
+
+                      child: Text(widget.seriesToEdit == null ? 'Add Series' : 'Update'),
+                    ),
+                  )
+                ],
               )
-            ],
+            ]
           )
-        )
-      ),
+        ),
+      )
     ); 
   }
 }

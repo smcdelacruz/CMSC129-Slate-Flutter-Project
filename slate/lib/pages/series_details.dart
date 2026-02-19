@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:slate/pages/add_series_form.dart';
 import '../models/series_model.dart';
 
+/// Series Details page that displays the details of a series.
 class SeriesDetailsPage extends StatefulWidget {
   final Series series;
  
+  // Callback functions to update or delete the series, passed from the Home page
   final void Function(Series) onUpdate;
   final void Function(String) onDelete;
 
@@ -21,6 +23,8 @@ class SeriesDetailsPage extends StatefulWidget {
 }
 
   class _SeriesDetailsPageState extends State<SeriesDetailsPage> {
+
+    // To refresh the series details automatically when edited
     Stream<Series> getSeriesStream(String id) {
       return FirebaseFirestore.instance
           .collection('series')
@@ -136,7 +140,11 @@ class SeriesDetailsPage extends StatefulWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(series.posterUrl, height: 300, fit: BoxFit.cover),
+                // Image.network(series.posterUrl, height: 300, fit: BoxFit.cover),
+                series.posterUrl.startsWith("http")
+                  ? Image.network(series.posterUrl, height: 300, fit: BoxFit.cover)
+                  : Image.asset(series.posterUrl, height: 300, fit: BoxFit.cover),
+
 
                 const SizedBox(height: 20),
 
@@ -144,6 +152,7 @@ class SeriesDetailsPage extends StatefulWidget {
                     style: const TextStyle(
                             fontSize: 24, 
                             fontWeight: FontWeight.bold)),
+                
                 const SizedBox(height: 10),
 
                 Text('Genre: ${series.genre}', 

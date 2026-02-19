@@ -1,32 +1,35 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'firebase_options.dart';
 import 'pages/home_page.dart';
-import 'pages/search_page.dart';
 import 'pages/add_series_form.dart';
-import 'pages/library_page.dart';
-import 'pages/user_page.dart';
 
+/// Entry point of the application.
 void main() async {
 
+  // To make sure Flutter bindings are initialized before Firebase
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Intializes Firebase with platform-specific options
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const SlateApp());
+  runApp(const SlateApp());   // Runs the Flutter app
 }
 
+/// SlateApp is the root app widget.
 class SlateApp extends StatelessWidget {
-  const SlateApp({super.key});
+  const SlateApp({super.key});    // Constructor with optional key parameter
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Slate',
+
+      // defines the global theme for the app
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color.fromRGBO(15, 12, 12, 1),
@@ -41,20 +44,23 @@ class SlateApp extends StatelessWidget {
   }
 }
 
+/// MainScreen is the main page of the Slate app.
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.title});
-  final String title;
+  final String title;   
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
+/// MainScreenState manages the state of MainScreen, including navigation and page management.
 class _MainScreenState extends State<MainScreen> {
-  final int _selectedIndex = 0;
+  // int _selectedIndex = 0;   // Tracks the currently selected page index
 
-  late final List<Widget> _pages;
+  late final List<Widget> _pages;   
 
-  // HomePage key to access its state
+  // HomePage key to access its state - home_page.dart
+  // purpose: to call state methods like addSeries() from AddSeriesForm after adding a new series
   final GlobalKey<HomePageState> homePageKey = GlobalKey<HomePageState>();
 
   @override
@@ -62,37 +68,26 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     _pages = <Widget>[
-      HomePage(key: homePageKey), // pass the key
-      SearchPage(),
-      LibraryPage(),
-      UserPage(),
+      HomePage(key: homePageKey), // pass the key to HomePage
     ];
   }
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
-
+  /// Opens the AddSeriesForm page when the floating action button is pressed.
   void _openAddSeriesForm() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AddSeriesForm(),
-        // builder: (context) => AddSeriesForm(
-        //   onSubmit: (series) {
-        //     // Call HomePage's state method to add series
-        //     homePageKey.currentState?.addSeries(series);
-        //   },
-        // ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
+      /// ========== AppBar ==========
       appBar: AppBar(
         centerTitle: true,
         title: Row(
@@ -113,14 +108,26 @@ class _MainScreenState extends State<MainScreen> {
         ),
         backgroundColor: Colors.black,
       ),
-      body: SafeArea(child: _pages[_selectedIndex]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openAddSeriesForm,
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-          child: const Icon(Icons.add, color: Colors.black),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      /// ========== BODY ==========
+      body: 
+        SafeArea(child: _pages[0]), // Always display HomePage for now
+
+        /// ========== Floating Action Button ==========
+        floatingActionButton: SizedBox(
+          width: 60,
+          height: 60,
+          child: FloatingActionButton(
+            /// When pressed, opens the AddSeriesForm page
+            onPressed: _openAddSeriesForm,
+            backgroundColor: const Color.fromARGB(255, 49, 107, 231),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            child: const Icon(Icons.add_rounded, color: Colors.white, size: 35,),
+          ),
+        ),
+        
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
       // bottomNavigationBar: BottomAppBar(
       //   shape: const CircularNotchedRectangle(),
       //   color: Colors.black,
